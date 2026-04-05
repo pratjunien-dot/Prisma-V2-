@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Settings2, Check, ArrowLeft } from "lucide-react";
 import { Glass } from "../../../shared/ui/atoms/Glass";
-import { useChatPipelineStore } from "../model/chat-pipeline.store";
+import { useChatPipelineStore } from "../../chat-pipeline/model/chat-pipeline.store";
 
 export const PersonaEditor = () => {
   const { context, confirmPersona, backToSelection } = useChatPipelineStore();

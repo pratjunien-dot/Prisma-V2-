@@ -4,7 +4,7 @@ import { InputPhase } from "./InputPhase";
 import { ModeSelector } from "./ModeSelector";
 import { MatrixProposer } from "./MatrixProposer";
 import { PersonaGenerator } from "./PersonaGenerator";
-import { PersonaEditor } from "./PersonaEditor";
+import { PersonaEditor } from "../../create-persona/ui/PersonaEditor";
 import { ChatWindow } from "./ChatWindow";
 
 export const ChatPipeline = () => {

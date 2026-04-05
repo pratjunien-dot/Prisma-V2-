@@ -37,7 +37,7 @@ export const RadioPlugin = () => {
       <Glass 
         level={2} 
         className={cn(
-          "flex items-center gap-2 sm:gap-3 px-2.5 py-1.5 sm:py-2 rounded-full cursor-pointer transition-all duration-500 border-white/5",
+          "flex items-center gap-3 px-3 py-2 rounded-2xl cursor-pointer transition-all duration-500 border-white/5 min-w-[140px]",
           isOpen ? "bg-white/15 ring-1 ring-accent/40 shadow-[0_0_20px_rgba(var(--accent-rgb),0.2)]" : "hover:bg-white/10"
         )}
         onClick={() => setIsOpen(!isOpen)}
@@ -45,20 +45,20 @@ export const RadioPlugin = () => {
         {/* Play Button Container */}
         <button 
           onClick={handleTogglePlay}
-          className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-accent/10 flex items-center justify-center text-accent hover:bg-accent/20 transition-all active:scale-90 overflow-hidden"
+          className="relative w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent hover:bg-accent/20 transition-all active:scale-90 overflow-hidden shrink-0"
         >
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div key="loader" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin" />
               </motion.div>
             ) : isPlaying ? (
               <motion.div key="pause" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                <Pause className="w-3 h-3 fill-current" />
+                <Pause className="w-4 h-4 fill-current" />
               </motion.div>
             ) : (
               <motion.div key="play" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                <Play className="w-3 h-3 fill-current ml-0.5" />
+                <Play className="w-4 h-4 fill-current ml-0.5" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -74,13 +74,13 @@ export const RadioPlugin = () => {
         </button>
 
         {/* Info Section */}
-        <div className="flex flex-col min-w-[70px] sm:min-w-[100px]">
-          <div className="flex items-center gap-1.5">
-            <span className="text-white text-[10px] sm:text-xs font-black leading-none truncate max-w-[60px] sm:max-w-[90px]">
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <div className="flex items-center gap-2">
+            <span className="text-white text-xs font-black leading-none truncate">
               {currentStation.name}
             </span>
             {isPlaying && !isLoading && (
-              <div className="flex gap-[1px] items-end h-2">
+              <div className="flex gap-[1px] items-end h-2.5">
                 {[0.4, 0.8, 0.5].map((h, i) => (
                   <motion.div
                     key={i}
@@ -92,14 +92,14 @@ export const RadioPlugin = () => {
               </div>
             )}
           </div>
-          <span className="text-accent text-[8px] font-black uppercase tracking-widest opacity-50">
+          <span className="text-accent text-[9px] font-black uppercase tracking-widest opacity-60 mt-0.5">
             {currentStation.freq} MHz
           </span>
         </div>
 
         <ChevronDown className={cn(
-          "w-3 h-3 text-text-muted transition-transform duration-500",
-          isOpen ? "rotate-180 text-accent" : "group-hover/radio:text-white"
+          "w-4 h-4 text-white/20 transition-transform duration-500 shrink-0",
+          isOpen ? "rotate-180 text-accent" : "group-hover/radio:text-white/40"
         )} />
       </Glass>
 
@@ -117,79 +117,147 @@ export const RadioPlugin = () => {
               "w-full max-w-7xl pointer-events-auto transition-all duration-500",
               isSidebarOpen ? "md:pl-[280px]" : "md:pl-[80px]"
             )}>
-              <div className="bg-[#0f0f0f]/90 backdrop-blur-xl border border-white/10 shadow-2xl rounded-[32px] p-6 w-full flex flex-col gap-6">
+              <div className="bg-[#0a0a0a]/95 backdrop-blur-3xl border border-white/10 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)] rounded-[40px] p-8 w-full flex flex-col gap-8">
                 {/* Header & Volume */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
-                  <div className="flex items-center gap-2">
-                    <Music className="w-5 h-5 text-accent" />
-                    <span className="text-sm font-black uppercase tracking-[0.2em] text-white">Stations Prisma</span>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center">
+                      <Music className="w-6 h-6 text-accent" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-black uppercase tracking-[0.2em] text-white">Prisma Radio</h2>
+                      <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mt-1">Sélection de flux haute fidélité</p>
+                    </div>
                   </div>
                   
-                  <div className="flex items-center gap-4 bg-white/5 px-4 py-2 rounded-2xl min-w-[200px]">
+                  <div className="flex items-center gap-6 bg-white/5 px-6 py-4 rounded-[24px] border border-white/5 min-w-[280px]">
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
                         setIsMuted(!isMuted);
                       }} 
-                      className="text-accent/80 hover:text-accent transition-colors"
+                      className="text-accent/80 hover:text-accent transition-colors shrink-0"
                     >
-                      {isMuted || volume === 0 ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                      {isMuted || volume === 0 ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
                     </button>
-                    <input 
-                      type="range" min="0" max="1" step="0.01" 
-                      value={volume} 
-                      onChange={(e) => { 
-                        setVolume(parseFloat(e.target.value)); 
-                        setIsMuted(false); 
-                      }}
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex-1 h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-accent"
-                    />
+                    <div className="flex-1 relative flex items-center">
+                      <input 
+                        type="range" min="0" max="1" step="0.01" 
+                        value={volume} 
+                        onChange={(e) => { 
+                          setVolume(parseFloat(e.target.value)); 
+                          setIsMuted(false); 
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-accent"
+                      />
+                    </div>
+                    <span className="text-[10px] font-black text-white/40 w-8 text-right">{Math.round(volume * 100)}%</span>
                   </div>
                 </div>
 
-                {/* Stations Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {STATIONS.map((station) => (
-                    <button
-                      key={station.id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSelectStation(station);
-                      }}
-                      className={cn(
-                        "flex items-center justify-between px-5 py-4 rounded-2xl transition-all group/item border",
-                        currentStation.id === station.id 
-                          ? "bg-accent/10 border-accent/30 text-accent shadow-[0_0_15px_rgba(var(--accent-rgb),0.1)]" 
-                          : "bg-white/5 border-transparent hover:bg-white/10 text-text-muted hover:text-white"
-                      )}
+                {/* Main Content: Now Playing + Grid */}
+                <div className="flex flex-col lg:flex-row gap-8">
+                  {/* Now Playing Block (Large Square) */}
+                  <div className="lg:w-1/3">
+                    <div 
+                      className="aspect-square rounded-[32px] p-8 flex flex-col justify-between relative overflow-hidden group/nowplaying border border-white/10 shadow-2xl"
+                      style={{ backgroundColor: `${currentStation.color}10` }}
                     >
-                      <div className="flex items-center gap-4">
+                      {/* Background Glow */}
+                      <div 
+                        className="absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[100px] opacity-20"
+                        style={{ backgroundColor: currentStation.color }}
+                      />
+                      
+                      <div className="relative z-10">
                         <div 
-                          className="w-3 h-3 rounded-full shadow-[0_0_10px_rgba(var(--accent-rgb),0.4)]"
-                          style={{ backgroundColor: station.color }}
-                        />
-                        <div className="flex flex-col items-start">
-                          <span className="text-sm font-bold tracking-tight">{station.name}</span>
-                          <span className="text-[10px] font-black opacity-40 uppercase tracking-widest">
-                            {station.freq} MHz
-                          </span>
+                          className="w-16 h-16 rounded-2xl mb-6 flex items-center justify-center text-3xl shadow-2xl border border-white/20"
+                          style={{ backgroundColor: currentStation.color, color: '#000' }}
+                        >
+                          {currentStation.name[0]}
                         </div>
+                        <h3 className="text-3xl font-black text-white leading-tight">{currentStation.name}</h3>
+                        <p className="text-accent font-black tracking-[0.3em] uppercase text-xs mt-2">{currentStation.freq} MHz</p>
                       </div>
-                      {currentStation.id === station.id && isPlaying && (
-                        <div className="flex gap-[2px] items-end h-3">
-                          {[0.4, 0.8, 0.5].map((h, i) => (
+
+                      <div className="relative z-10 flex items-end justify-between">
+                        <div className="flex gap-1 items-end h-12">
+                          {[...Array(8)].map((_, i) => (
                             <motion.div
                               key={i}
-                              animate={{ height: ["20%", "100%", "20%"] }}
-                              transition={{ repeat: Infinity, duration: 0.5 + i * 0.1 }}
-                              className="w-[2px] bg-accent rounded-full"
+                              animate={{ 
+                                height: isPlaying && !isLoading ? ["20%", "100%", "20%"] : "20%" 
+                              }}
+                              transition={{ 
+                                repeat: Infinity, 
+                                duration: 0.4 + Math.random() * 0.4,
+                                delay: i * 0.05
+                              }}
+                              className="w-1.5 bg-accent rounded-full"
                             />
                           ))}
                         </div>
-                      )}
-                    </button>
-                  ))}
+                        
+                        <button 
+                          onClick={handleTogglePlay}
+                          className="w-16 h-16 rounded-2xl bg-white text-black flex items-center justify-center hover:scale-110 transition-transform shadow-2xl active:scale-95"
+                        >
+                          {isPlaying ? <Pause className="w-6 h-6 fill-current" /> : <Play className="w-6 h-6 fill-current ml-1" />}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Stations Grid (Square Blocks) */}
+                  <div className="lg:w-2/3 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {STATIONS.map((station) => (
+                      <button
+                        key={station.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelectStation(station);
+                        }}
+                        className={cn(
+                          "flex flex-col items-center justify-center aspect-square rounded-[32px] transition-all duration-500 group/item border p-6 relative overflow-hidden",
+                          currentStation.id === station.id 
+                            ? "bg-white/10 border-accent/50 shadow-[0_0_30px_rgba(var(--accent-rgb),0.15)]" 
+                            : "bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20"
+                        )}
+                      >
+                        {/* Active Indicator */}
+                        {currentStation.id === station.id && (
+                          <motion.div 
+                            layoutId="active-bg"
+                            className="absolute inset-0 bg-accent/5 pointer-events-none"
+                          />
+                        )}
+
+                        <div 
+                          className={cn(
+                            "w-14 h-14 rounded-2xl mb-4 flex items-center justify-center text-xl transition-all duration-500 group-hover/item:scale-110 shadow-xl",
+                            currentStation.id === station.id ? "scale-110" : ""
+                          )}
+                          style={{ 
+                            backgroundColor: `${station.color}20`, 
+                            color: station.color,
+                            border: `1px solid ${station.color}40`
+                          }}
+                        >
+                          {station.name[0]}
+                        </div>
+                        <span className={cn(
+                          "text-sm font-black tracking-tight text-center transition-colors",
+                          currentStation.id === station.id ? "text-white" : "text-white/60 group-hover/item:text-white"
+                        )}>
+                          {station.name}
+                        </span>
+                        <span className="text-[9px] font-black opacity-30 uppercase tracking-[0.2em] mt-1.5">
+                          {station.freq} MHz
+                        </span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

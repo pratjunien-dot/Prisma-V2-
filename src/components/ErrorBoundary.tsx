@@ -1,5 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
-import { Glass } from "../ui/Glass";
+import { Glass } from "../shared/ui/atoms/Glass";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 
 interface Props {

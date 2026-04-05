@@ -1,9 +1,10 @@
 import { motion } from "motion/react";
-import { Glass } from "../ui/Glass";
+import { Glass } from "../shared/ui/atoms/Glass";
 import { useUIStore } from "../stores/uiStore";
 import { Brain, MessageSquare, History, Star, Settings } from "lucide-react";
 import { WeatherWidget } from "../widgets/weather-widget/ui/WeatherWidget";
 import { NewsWidget } from "../widgets/news-widget/ui/NewsWidget";
+import { RadioWidget } from "../widgets/radio-plugin/ui/RadioWidget";
 
 export const DashboardView = () => {
   const { setView, toggleHistory, toggleFavorites } = useUIStore();
@@ -44,7 +45,7 @@ export const DashboardView = () => {
 
           <Glass 
             level={2} 
-            onClick={() => setView("debate")}
+            onClick={() => setView("chat")} // Debate is now in chat
             className="group cursor-pointer hover:border-accent/50 transition-all p-8 flex flex-col items-center text-center space-y-4 h-full"
           >
             <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -58,9 +59,10 @@ export const DashboardView = () => {
         </div>
 
         {/* Right Column: Widgets */}
-        <div className="md:col-span-4 grid gap-4 grid-rows-2">
+        <div className="md:col-span-4 grid gap-4 grid-rows-3">
           <WeatherWidget />
           <NewsWidget />
+          <RadioWidget />
         </div>
       </div>
 

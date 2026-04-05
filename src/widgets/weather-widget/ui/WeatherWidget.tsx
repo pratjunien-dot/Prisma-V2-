@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { CloudRain, Sun, Cloud, Snowflake, Loader2 } from "lucide-react";
-import { Glass } from "../../../ui/Glass";
+import { Glass } from "../../../shared/ui/atoms/Glass";
 
 interface WeatherData {
   current: {

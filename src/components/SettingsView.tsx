@@ -1,4 +1,4 @@
-import { Glass } from "../ui/Glass";
+import { Glass } from "../shared/ui/atoms/Glass";
 import { useUIStore } from "../stores/uiStore";
 import { Moon, Sun, Monitor, Trash2, Shield, Info } from "lucide-react";
 

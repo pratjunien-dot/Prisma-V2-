@@ -1,7 +1,7 @@
-import { Drawer } from "../ui/Drawer";
+import { Drawer } from "../shared/ui/molecules/Drawer";
 import { useUIStore } from "../stores/uiStore";
 import { Star, Trash2, MessageSquare } from "lucide-react";
-import { Glass } from "../ui/Glass";
+import { Glass } from "../shared/ui/atoms/Glass";
 
 export const FavoritesDrawer = () => {
   const { isFavoritesOpen, toggleFavorites } = useUIStore();

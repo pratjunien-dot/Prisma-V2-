@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Settings, LogOut, Shield, User } from "lucide-react";
-import { Glass } from "../ui/Glass";
+import { Glass } from "../shared/ui/atoms/Glass";
 import { useUIStore } from "../stores/uiStore";
 
 export const ProfileMenu = () => {

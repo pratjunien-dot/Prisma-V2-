@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { useUIStore } from "../stores/uiStore";
 import { Brain, Sparkles, Zap } from "lucide-react";
-import { Glass } from "../ui/Glass";
+import { Glass } from "../shared/ui/atoms/Glass";
 
 export const HomeView = () => {
   const { setView } = useUIStore();

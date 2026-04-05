@@ -1,7 +1,7 @@
-import { Drawer } from "../ui/Drawer";
+import { Drawer } from "../shared/ui/molecules/Drawer";
 import { useUIStore } from "../stores/uiStore";
 import { History, Trash2, MessageSquare, Clock } from "lucide-react";
-import { Glass } from "../ui/Glass";
+import { Glass } from "../shared/ui/atoms/Glass";
 
 export const HistoryDrawer = () => {
   const { isHistoryOpen, toggleHistory } = useUIStore();

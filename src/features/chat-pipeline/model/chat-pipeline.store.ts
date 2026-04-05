@@ -80,7 +80,7 @@ const initialState = {
   },
 };
 
-export const useChatPipelineStore = create<ChatPipelineStore>((set) => ({
+export const useChatPipelineStore = create<ChatPipelineStore>()((set) => ({
   ...initialState,
 
   submitIntention: (text) => set((state) => ({

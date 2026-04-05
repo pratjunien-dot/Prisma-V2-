@@ -54,7 +54,7 @@ export const Header = () => {
             }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-0 left-0 right-0 z-[100] flex justify-center px-4 pt-[env(safe-area-inset-top,1rem)] pointer-events-none"
+            className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-[env(safe-area-inset-top,1rem)] pointer-events-none"
           >
             <div className="w-full max-w-5xl pointer-events-auto box-border">
               <Glass 
