@@ -1,5 +1,5 @@
 import { GeminiAdapter } from "../../../shared/api/gemini/GeminiAdapter";
-import { AdvancedMatricesResponseSchema, AdvancedMatrix } from "../../../entities/schemas";
+import { AdvancedMatricesResponseSchema, AdvancedMatrix } from "../../../entities/matrix/model/types";
 
 const PROMPT_TEMPLATE = (userInput: string) => `
 Analyse la question utilisateur : "${userInput}".

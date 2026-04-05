@@ -1,5 +1,6 @@
 import { GeminiAdapter } from "../../../shared/api/gemini/GeminiAdapter";
-import { Persona, Memory } from "../../../entities/schemas";
+import { Persona } from "../../../entities/persona/model/types";
+import { Memory } from "../../../entities/memory/model/types";
 import { buildSystemInstruction } from "../model/prompt-builder";
 
 export const streamPersonaResponse = async (

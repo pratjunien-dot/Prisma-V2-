@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { AdvancedAxis } from "../../../entities/schemas";
+import { AdvancedAxis } from "../../../entities/matrix/model/types";
 
 interface AxisBarProps {
   axis: AdvancedAxis;

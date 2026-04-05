@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useUIStore } from "./stores/uiStore";
+import { useThemeStore } from "./features/ui-theme/model/theme.store";
 import { cn } from "./shared/lib/utils";
 import { DashboardView } from "./components/DashboardView";
 import { HomeView } from "./components/HomeView";
@@ -17,7 +18,8 @@ import { RadioProvider } from "./shared/lib/audio/RadioContext";
 import { useSwipeGesture } from "./lib/useSwipeGesture";
 
 function App() {
-  const { currentView, setView, theme, accentColor, isSidebarOpen } = useUIStore();
+  const { currentView, setView, isSidebarOpen, toggleSidebar } = useUIStore();
+  const { mode, accentColor } = useThemeStore();
 
   const views = ["home", "dashboard", "chat", "settings"];
 
@@ -68,7 +70,7 @@ function App() {
     <ErrorBoundary>
       <RadioProvider>
         <div 
-          className={`min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] font-sans selection:bg-accent/30 selection:text-accent overflow-x-hidden transition-colors duration-500 ${theme}`}
+          className={`min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] font-sans selection:bg-accent/30 selection:text-accent overflow-x-hidden transition-colors duration-500 ${mode}`}
         >
           {/* Ambient Background */}
           <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-gradient-to-br from-transparent to-black/20">
@@ -104,7 +106,7 @@ function App() {
           </div>
 
           {/* Layout Structure */}
-          <Sidebar />
+          <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
           <Header />
 
           {/* Main Layout */}

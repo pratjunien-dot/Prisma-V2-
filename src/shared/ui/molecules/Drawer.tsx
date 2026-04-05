@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X } from "lucide-react";
-import { Glass } from "./Glass";
+import { Glass } from "../atoms/Glass";
 
 interface DrawerProps {
   isOpen: boolean;

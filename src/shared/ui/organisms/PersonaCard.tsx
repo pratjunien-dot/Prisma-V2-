@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Persona } from "../../../entities/schemas";
+import { Persona } from "../../../entities/persona/model/types";
 import { Glass } from "../atoms/Glass";
 import { AccentChip } from "../atoms/AccentChip";
 import { TensionBadge } from "../molecules/TensionBadge";

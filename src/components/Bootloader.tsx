@@ -70,7 +70,7 @@ export default function Bootloader({ onComplete }: { onComplete: () => void }) {
           fontFamily: "'DM Sans', sans-serif"
         }}
       >
-        Aura
+        Prisma
       </motion.div>
     </div>
   );

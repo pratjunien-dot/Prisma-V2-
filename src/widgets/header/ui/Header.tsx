@@ -7,15 +7,16 @@ import { useAuth } from "../../../features/auth/use-auth";
 import { Link } from "react-router-dom";
 import { cn } from "../../../shared/lib/utils";
 import { useThemeStore } from "../../../features/ui-theme/model/theme.store";
+import { useUIStore } from "../../../stores/uiStore";
 import { Sidebar } from "../../sidebar/ui/Sidebar";
 
 export const Header = () => {
   const { user, login, isLoading } = useAuth();
   const { isUiVisible } = useThemeStore();
+  const { toggleSidebar } = useUIStore();
   const [isScrollVisible, setIsScrollVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,11 +41,8 @@ export const Header = () => {
   const showHeader = isUiVisible && isScrollVisible;
 
   return (
-    <>
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      
-      <AnimatePresence>
-        {showHeader && (
+    <AnimatePresence>
+      {showHeader && (
           <motion.header
             initial={{ y: -100, opacity: 0 }}
             animate={{ 
@@ -66,7 +64,7 @@ export const Header = () => {
               >
                 <div className="flex items-center gap-2 sm:gap-4 shrink-0">
                   <button 
-                    onClick={() => setIsSidebarOpen(true)}
+                    onClick={toggleSidebar}
                     className="p-2 hover:bg-white/10 rounded-full transition-colors text-white group"
                   >
                     <Menu className="w-5 h-5 sm:w-6 sm:h-6 group-hover:text-accent transition-colors" />
@@ -119,6 +117,5 @@ export const Header = () => {
           </motion.header>
         )}
       </AnimatePresence>
-    </>
   );
 };

@@ -1,24 +1,16 @@
 import { Glass } from "../shared/ui/atoms/Glass";
-import { useUIStore } from "../stores/uiStore";
-import { Moon, Sun, Monitor, Trash2, Shield, Info } from "lucide-react";
+import { useThemeStore } from "../features/ui-theme/model/theme.store";
+import { THEMES } from "../shared/lib/constants/themes";
+import { Moon, Sun, Zap, Trash2, Shield, Info } from "lucide-react";
 
 export const SettingsView = () => {
-  const { theme, setTheme, accentColor, setAccentColor } = useUIStore();
-
-  const colors = [
-    { name: "Cyan", value: "#00E0C8" },
-    { name: "Indigo", value: "#6366F1" },
-    { name: "Violet", value: "#8B5CF6" },
-    { name: "Emerald", value: "#10B981" },
-    { name: "Amber", value: "#F59E0B" },
-    { name: "Rose", value: "#F43F5E" },
-  ];
+  const { mode, setMode, theme: currentThemeId, setTheme } = useThemeStore();
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-8">
       <div className="space-y-1">
         <h2 className="text-white text-2xl font-black uppercase tracking-tighter">Paramètres</h2>
-        <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">Configuration du système S1</p>
+        <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">Configuration du système</p>
       </div>
 
       {/* Theme Selection */}
@@ -26,21 +18,21 @@ export const SettingsView = () => {
         <h3 className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em]">Moteur de Thème</h3>
         <div className="grid grid-cols-3 gap-4">
           <ThemeButton 
-            active={theme === "dark"} 
-            onClick={() => setTheme("dark")}
+            active={mode === "dark"} 
+            onClick={() => setMode("dark")}
             icon={<Moon size={20} />}
-            label="Dark"
+            label="Sombre"
           />
           <ThemeButton 
-            active={theme === "light"} 
-            onClick={() => setTheme("light")}
+            active={mode === "light"} 
+            onClick={() => setMode("light")}
             icon={<Sun size={20} />}
-            label="Light"
+            label="Clair"
           />
           <ThemeButton 
-            active={theme === "oled"} 
-            onClick={() => setTheme("oled")}
-            icon={<Monitor size={20} />}
+            active={mode === "oled"} 
+            onClick={() => setMode("oled")}
+            icon={<Zap size={20} />}
             label="OLED"
           />
         </div>
@@ -49,16 +41,16 @@ export const SettingsView = () => {
       {/* Accent Color Selection */}
       <section className="space-y-4">
         <h3 className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em]">Signature Chromatique</h3>
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-          {colors.map((color) => (
+        <div className="grid grid-cols-3 sm:grid-cols-7 gap-3">
+          {THEMES.map((color) => (
             <button
-              key={color.value}
-              onClick={() => setAccentColor(color.value)}
-              className={`h-12 rounded-xl border-2 transition-all flex items-center justify-center ${accentColor === color.value ? "border-white scale-110 shadow-lg" : "border-white/5 hover:border-white/20"}`}
-              style={{ backgroundColor: color.value }}
+              key={color.id}
+              onClick={() => setTheme(color.id)}
+              className={`h-12 rounded-xl border-2 transition-all flex items-center justify-center ${currentThemeId === color.id ? "border-white scale-110 shadow-lg" : "border-white/5 hover:border-white/20"}`}
+              style={{ backgroundColor: color.color }}
               title={color.name}
             >
-              {accentColor === color.value && <div className="w-2 h-2 rounded-full bg-white shadow-sm" />}
+              {currentThemeId === color.id && <div className="w-2 h-2 rounded-full bg-white shadow-sm" />}
             </button>
           ))}
         </div>
@@ -83,7 +75,7 @@ export const SettingsView = () => {
           <SettingsItem 
             icon={<Info size={18} className="text-white/40" />}
             label="Version du Système"
-            description="S1 Architect v2.4.0-alpha"
+            description="Prisma OS v2.1.0"
             onClick={() => {}}
           />
         </Glass>

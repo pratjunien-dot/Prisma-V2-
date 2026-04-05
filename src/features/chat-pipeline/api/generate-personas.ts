@@ -1,5 +1,6 @@
 import { GeminiAdapter } from "../../../shared/api/gemini/GeminiAdapter";
-import { PersonasResponseSchema, Persona, AdvancedMatrix } from "../../../entities/schemas";
+import { PersonasResponseSchema, Persona } from "../../../entities/persona/model/types";
+import { AdvancedMatrix } from "../../../entities/matrix/model/types";
 
 const PROMPT_TEMPLATE = (userInput: string, selectedMatrix: AdvancedMatrix) => `
 Question utilisateur : "${userInput}"

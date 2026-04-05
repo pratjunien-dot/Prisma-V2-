@@ -1,5 +1,5 @@
 import { Zap } from "lucide-react";
-import { MatrixTension } from "../../../entities/schemas";
+import { MatrixTension } from "../../../entities/matrix/model/types";
 import { cn } from "../../lib/utils";
 
 interface TensionBadgeProps {

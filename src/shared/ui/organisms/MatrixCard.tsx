@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { AdvancedMatrix } from "../../../entities/schemas";
+import { AdvancedMatrix } from "../../../entities/matrix/model/types";
 import { Glass } from "../atoms/Glass";
 import { AxisBar } from "../molecules/AxisBar";
 import { TensionBadge } from "../molecules/TensionBadge";

@@ -1,4 +1,5 @@
-import { Persona, Memory } from "../../../entities/schemas";
+import { Persona } from "../../../entities/persona/model/types";
+import { Memory } from "../../../entities/memory/model/types";
 
 export const buildSystemInstruction = (persona: Persona, memories: Memory[] = []) => {
   const axes = persona.axes;

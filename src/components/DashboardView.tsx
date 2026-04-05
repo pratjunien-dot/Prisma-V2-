@@ -18,7 +18,7 @@ export const DashboardView = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase"
         >
-          S1 <span className="text-accent">Hub</span>
+          Prisma <span className="text-accent">Hub</span>
         </motion.h1>
         <p className="text-white/40 text-xs tracking-[0.2em] uppercase font-bold">
           Centre de Contrôle Prisma OS
