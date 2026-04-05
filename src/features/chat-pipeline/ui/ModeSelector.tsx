@@ -1,4 +1,3 @@
-import { motion } from "motion/react";
 import { Zap, Microscope } from "lucide-react";
 import { Glass } from "../../../shared/ui/atoms/Glass";
 import { useChatPipelineStore } from "../model/chat-pipeline.store";

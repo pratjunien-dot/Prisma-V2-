@@ -22,6 +22,8 @@ export const ChatPipeline = () => {
       case "GENERATING_PERSONAS":
       case "SELECTING_PERSONA":
         return <PersonaGenerator key="personas" />;
+      case "EDITING_PERSONA":
+        return <PersonaEditor key="editor" />;
       case "CHATTING_SINGLE":
       case "CHATTING_DUO":
       case "CHATTING_TRIO":

@@ -1,11 +1,10 @@
-import { useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useUIStore } from "./stores/uiStore";
 import { cn } from "./shared/lib/utils";
 import { DashboardView } from "./components/DashboardView";
 import { HomeView } from "./components/HomeView";
 import { ChatInterface } from "./components/ChatInterface";
-import { DebateView } from "./components/DebateView";
 import { SettingsView } from "./components/SettingsView";
 import { FavoritesDrawer } from "./components/FavoritesDrawer";
 import { HistoryDrawer } from "./components/HistoryDrawer";
@@ -20,19 +19,19 @@ import { useSwipeGesture } from "./lib/useSwipeGesture";
 function App() {
   const { currentView, setView, theme, accentColor, isSidebarOpen } = useUIStore();
 
-  const views = ["home", "dashboard", "chat", "debate", "settings"];
+  const views = ["home", "dashboard", "chat", "settings"];
 
   useSwipeGesture({
     onSwipeLeft: () => {
-      const currentIndex = views.indexOf(currentView);
+      const currentIndex = views.indexOf(currentView as string);
       if (currentIndex < views.length - 1) {
-        setView(views[currentIndex + 1] as any);
+        setView(views[currentIndex + 1] as "home" | "dashboard" | "chat" | "settings");
       }
     },
     onSwipeRight: () => {
-      const currentIndex = views.indexOf(currentView);
+      const currentIndex = views.indexOf(currentView as string);
       if (currentIndex > 0) {
-        setView(views[currentIndex - 1] as any);
+        setView(views[currentIndex - 1] as "home" | "dashboard" | "chat" | "settings");
       }
     },
     threshold: 100
@@ -58,8 +57,6 @@ function App() {
         return <DashboardView key="dashboard" />;
       case "chat":
         return <ChatInterface key="chat" />;
-      case "debate":
-        return <DebateView key="debate" />;
       case "settings":
         return <SettingsView key="settings" />;
       default:

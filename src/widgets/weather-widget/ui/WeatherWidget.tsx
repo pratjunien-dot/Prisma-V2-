@@ -2,8 +2,22 @@ import { useState, useEffect } from "react";
 import { CloudRain, Sun, Cloud, Snowflake, Loader2 } from "lucide-react";
 import { Glass } from "../../../ui/Glass";
 
+interface WeatherData {
+  current: {
+    temperature_2m: number;
+    relative_humidity_2m: number;
+    wind_speed_10m: number;
+    weather_code: number;
+  };
+  hourly: {
+    time: string[];
+    temperature_2m: number[];
+    weather_code: number[];
+  };
+}
+
 export const WeatherWidget = () => {
-  const [weather, setWeather] = useState<any>(null);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { motion } from "motion/react";
-import { Check, Loader2, RefreshCw, Users } from "lucide-react";
+import { Check, Edit2, Loader2, RefreshCw, Users } from "lucide-react";
 import { Glass } from "../../../shared/ui/atoms/Glass";
 import { useChatPipelineStore } from "../model/chat-pipeline.store";
 import { geminiAdapter } from "../api/GeminiAdapter";
 
 export const PersonaGenerator = () => {
-  const { status, context, setProposedPersonas, startChat } = useChatPipelineStore();
+  const { status, context, setProposedPersonas, startChat, editPersona } = useChatPipelineStore();
 
   useEffect(() => {
     if (status === "GENERATING_PERSONAS") {
@@ -99,13 +99,22 @@ export const PersonaGenerator = () => {
                 </div>
               )}
 
-              <button 
-                onClick={() => startChat("SINGLE", [persona])}
-                className="mt-8 w-full py-3 rounded-xl bg-white/5 text-white font-bold uppercase tracking-widest text-xs hover:bg-accent hover:text-black transition-colors flex items-center justify-center gap-2"
-              >
-                <Check size={16} />
-                Solo
-              </button>
+              <div className="flex gap-2 mt-8">
+                <button 
+                  onClick={() => startChat("SINGLE", [persona])}
+                  className="flex-1 py-3 rounded-xl bg-accent text-black font-bold uppercase tracking-widest text-[10px] hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                >
+                  <Check size={14} />
+                  Solo
+                </button>
+                <button 
+                  onClick={() => editPersona(persona)}
+                  className="p-3 rounded-xl bg-white/5 text-white/40 hover:text-white hover:bg-white/10 transition-all"
+                  title="Affiner"
+                >
+                  <Edit2 size={14} />
+                </button>
+              </div>
             </Glass>
           </motion.div>
         ))}

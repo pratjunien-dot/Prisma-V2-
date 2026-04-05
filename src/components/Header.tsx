@@ -55,7 +55,7 @@ export const Header = () => {
               <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 sm:gap-4 lg:gap-6">
                 <div className="hidden lg:flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
-                  <span className="text-accent text-[8px] font-black uppercase tracking-[0.2em]">Système S1 : Opérationnel</span>
+                  <span className="text-accent text-[8px] font-black uppercase tracking-[0.2em]">Système Opérationnel</span>
                 </div>
                 <div className="hidden lg:block w-px h-4 bg-white/10" />
                 <div className="hidden md:flex items-center gap-2">

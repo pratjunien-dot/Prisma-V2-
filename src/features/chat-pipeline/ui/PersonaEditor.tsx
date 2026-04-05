@@ -4,7 +4,7 @@ import { Glass } from "../../../shared/ui/atoms/Glass";
 import { useChatPipelineStore } from "../model/chat-pipeline.store";
 
 export const PersonaEditor = () => {
-  const { context, confirmPersona, setProposedPersonas } = useChatPipelineStore();
+  const { context, confirmPersona, backToSelection } = useChatPipelineStore();
   const [editedPersona, setEditedPersona] = useState(context.finalPersona!);
 
   const handleSave = () => {
@@ -12,8 +12,7 @@ export const PersonaEditor = () => {
   };
 
   const handleBack = () => {
-    // Go back to selection by re-triggering SELECTING_PERSONA
-    setProposedPersonas(context.proposedPersonas);
+    backToSelection();
   };
 
   return (
@@ -35,8 +34,8 @@ export const PersonaEditor = () => {
 
       <Glass level={2} className="p-8 space-y-6">
         <div className="flex items-center gap-6">
-          <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-accent">
-            <img src={editedPersona.avatar} alt={editedPersona.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+          <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center text-5xl border-2 border-accent/30 shadow-2xl">
+            {editedPersona.avatar}
           </div>
           <div className="flex-1 space-y-4">
             <div>

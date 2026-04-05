@@ -5,4 +5,5 @@ export interface ChatMessage {
   role: "user" | "model" | "system";
   content: string;
   createdAt: Date;
+  personaId?: string;
 }

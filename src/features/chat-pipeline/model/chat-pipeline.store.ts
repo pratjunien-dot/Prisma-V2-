@@ -27,6 +27,7 @@ export type PipelineState =
   | "SELECTING_MATRIX" 
   | "GENERATING_PERSONAS" 
   | "SELECTING_PERSONA" 
+  | "EDITING_PERSONA"
   | "CHATTING_SINGLE"
   | "CHATTING_DUO"
   | "CHATTING_TRIO"
@@ -46,6 +47,7 @@ interface ChatPipelineStore {
     selectedPersonas: Persona[];
     collaborationMode: CollaborationMode | null;
     messages: ChatMessage[];
+    finalPersona: Persona | null;
   };
   
   // Actions (Transitions)
@@ -54,6 +56,9 @@ interface ChatPipelineStore {
   setProposedMatrices: (matrices: Matrix[]) => void;
   selectMatrix: (matrixId: string, labels?: string[]) => void;
   setProposedPersonas: (personas: Persona[]) => void;
+  editPersona: (persona: Persona) => void;
+  confirmPersona: (persona: Persona) => void;
+  backToSelection: () => void;
   startChat: (mode: CollaborationMode, personas: Persona[]) => void;
   addMessage: (message: ChatMessage) => void;
   reset: () => void;
@@ -71,6 +76,7 @@ const initialState = {
     selectedPersonas: [],
     collaborationMode: null,
     messages: [],
+    finalPersona: null,
   },
 };
 
@@ -105,6 +111,20 @@ export const useChatPipelineStore = create<ChatPipelineStore>((set) => ({
   setProposedPersonas: (personas) => set((state) => ({
     status: "SELECTING_PERSONA",
     context: { ...state.context, proposedPersonas: personas }
+  })),
+
+  editPersona: (persona) => set((state) => ({
+    status: "EDITING_PERSONA",
+    context: { ...state.context, finalPersona: persona }
+  })),
+
+  confirmPersona: (persona) => set((state) => ({
+    status: "CHATTING_SINGLE",
+    context: { ...state.context, selectedPersonas: [persona], finalPersona: persona }
+  })),
+
+  backToSelection: () => set(() => ({
+    status: "SELECTING_PERSONA"
   })),
 
   startChat: (mode, personas) => set((state) => {

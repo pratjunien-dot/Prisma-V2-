@@ -2,8 +2,16 @@ import { useState, useEffect } from "react";
 import { Newspaper, ExternalLink, Loader2 } from "lucide-react";
 import { Glass } from "../../../ui/Glass";
 
+interface NewsItem {
+  id: string;
+  title: string | null | undefined;
+  link: string | null | undefined;
+  source: string;
+  time: string;
+}
+
 export const NewsWidget = () => {
-  const [news, setNews] = useState<any[]>([]);
+  const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

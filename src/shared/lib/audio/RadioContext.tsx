@@ -37,6 +37,41 @@ export const STATIONS: Station[] = [
     color: "#E11D48", 
     url: "https://icecast.radiofrance.fr/fip-midfi.mp3" 
   },
+  { 
+    id: "info",
+    name: "France Info", 
+    freq: "105.5", 
+    color: "#FACC15", 
+    url: "https://icecast.radiofrance.fr/franceinfo-midfi.mp3" 
+  },
+  { 
+    id: "bleu",
+    name: "France Bleu", 
+    freq: "107.1", 
+    color: "#3B82F6", 
+    url: "https://icecast.radiofrance.fr/fbparis-midfi.mp3" 
+  },
+  { 
+    id: "nova",
+    name: "Radio Nova", 
+    freq: "101.5", 
+    color: "#10B981", 
+    url: "https://nova-ln-midfi.ice.infomaniak.ch/nova-ln-midfi.mp3" 
+  },
+  { 
+    id: "tsf",
+    name: "TSF Jazz", 
+    freq: "89.9", 
+    color: "#F59E0B", 
+    url: "http://tsfjazz.ice.infomaniak.ch/tsfjazz-high.mp3" 
+  },
+  { 
+    id: "latina",
+    name: "Radio Latina", 
+    freq: "99.0", 
+    color: "#EF4444", 
+    url: "http://broadcast.infomaniak.ch/radiolatina-high.mp3" 
+  }
 ];
 
 interface RadioContextType {

@@ -4,6 +4,7 @@ import { Play, Pause, ChevronDown, Volume2, VolumeX, Loader2, Music } from "luci
 import { Glass } from "../../../shared/ui/atoms/Glass";
 import { cn } from "../../../shared/lib/utils";
 import { useRadio, STATIONS } from "../../../shared/lib/audio/RadioContext";
+import { useUIStore } from "../../../stores/uiStore";
 
 export const RadioPlugin = () => {
   const { 
@@ -18,6 +19,7 @@ export const RadioPlugin = () => {
     setIsMuted 
   } = useRadio();
   
+  const { isSidebarOpen } = useUIStore();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleTogglePlay = (e: React.MouseEvent) => {
@@ -109,66 +111,86 @@ export const RadioPlugin = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="fixed top-24 left-1/2 -translate-x-1/2 z-50 w-full max-w-7xl px-4"
+            className="fixed top-24 right-0 left-0 md:left-0 z-50 flex justify-center px-4 pointer-events-none"
           >
-            <div className="bg-[#0f0f0f] border border-white/10 shadow-2xl rounded-2xl p-4 w-full flex flex-col md:flex-row gap-6">
-              {/* Volume & Controls */}
-              <div className="flex-1 min-w-[200px]">
-                <div className="flex items-center gap-2 mb-4">
-                  <Music className="w-4 h-4 text-accent" />
-                  <span className="text-xs font-black uppercase tracking-[0.2em] text-white/70">Stations Prisma</span>
+            <div className={cn(
+              "w-full max-w-7xl pointer-events-auto transition-all duration-500",
+              isSidebarOpen ? "md:pl-[280px]" : "md:pl-[80px]"
+            )}>
+              <div className="bg-[#0f0f0f]/90 backdrop-blur-xl border border-white/10 shadow-2xl rounded-[32px] p-6 w-full flex flex-col gap-6">
+                {/* Header & Volume */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
+                  <div className="flex items-center gap-2">
+                    <Music className="w-5 h-5 text-accent" />
+                    <span className="text-sm font-black uppercase tracking-[0.2em] text-white">Stations Prisma</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-4 bg-white/5 px-4 py-2 rounded-2xl min-w-[200px]">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsMuted(!isMuted);
+                      }} 
+                      className="text-accent/80 hover:text-accent transition-colors"
+                    >
+                      {isMuted || volume === 0 ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                    </button>
+                    <input 
+                      type="range" min="0" max="1" step="0.01" 
+                      value={volume} 
+                      onChange={(e) => { 
+                        setVolume(parseFloat(e.target.value)); 
+                        setIsMuted(false); 
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex-1 h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-accent"
+                    />
+                  </div>
                 </div>
-                <div className="px-4 py-3 flex items-center gap-4 bg-white/5 rounded-xl">
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsMuted(!isMuted);
-                    }} 
-                    className="text-accent/80 hover:text-accent transition-colors"
-                  >
-                    {isMuted || volume === 0 ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-                  </button>
-                  <input 
-                    type="range" min="0" max="1" step="0.01" 
-                    value={volume} 
-                    onChange={(e) => { 
-                      setVolume(parseFloat(e.target.value)); 
-                      setIsMuted(false); 
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex-1 h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-accent"
-                  />
-                </div>
-              </div>
 
-              {/* Stations Grid */}
-              <div className="flex-[2] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                {STATIONS.map((station) => (
-                  <button
-                    key={station.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleSelectStation(station);
-                    }}
-                    className={cn(
-                      "flex items-center justify-between px-4 py-3 rounded-xl transition-all group/item border",
-                      currentStation.id === station.id 
-                        ? "bg-accent/10 border-accent/30 text-accent" 
-                        : "bg-white/5 border-transparent hover:bg-white/10 text-text-muted hover:text-white"
-                    )}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div 
-                        className="w-2 h-2 rounded-full shadow-[0_0_10px_rgba(var(--accent-rgb),0.4)]"
-                        style={{ backgroundColor: station.color }}
-                      />
-                      <span className="text-sm font-bold tracking-tight">{station.name}</span>
-                    </div>
-                    <span className="text-[10px] font-black opacity-50 group-hover/item:opacity-100 transition-opacity">
-                      {station.freq}
-                    </span>
-                  </button>
-                ))}
+                {/* Stations Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {STATIONS.map((station) => (
+                    <button
+                      key={station.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectStation(station);
+                      }}
+                      className={cn(
+                        "flex items-center justify-between px-5 py-4 rounded-2xl transition-all group/item border",
+                        currentStation.id === station.id 
+                          ? "bg-accent/10 border-accent/30 text-accent shadow-[0_0_15px_rgba(var(--accent-rgb),0.1)]" 
+                          : "bg-white/5 border-transparent hover:bg-white/10 text-text-muted hover:text-white"
+                      )}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div 
+                          className="w-3 h-3 rounded-full shadow-[0_0_10px_rgba(var(--accent-rgb),0.4)]"
+                          style={{ backgroundColor: station.color }}
+                        />
+                        <div className="flex flex-col items-start">
+                          <span className="text-sm font-bold tracking-tight">{station.name}</span>
+                          <span className="text-[10px] font-black opacity-40 uppercase tracking-widest">
+                            {station.freq} MHz
+                          </span>
+                        </div>
+                      </div>
+                      {currentStation.id === station.id && isPlaying && (
+                        <div className="flex gap-[2px] items-end h-3">
+                          {[0.4, 0.8, 0.5].map((h, i) => (
+                            <motion.div
+                              key={i}
+                              animate={{ height: ["20%", "100%", "20%"] }}
+                              transition={{ repeat: Infinity, duration: 0.5 + i * 0.1 }}
+                              className="w-[2px] bg-accent rounded-full"
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>

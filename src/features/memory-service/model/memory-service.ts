@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../../../firebase";
+import { db } from "../../../shared/api/firebase";
 import { ChatMessage } from "../../../entities/message/model/types";
 import { Memory } from "../../../entities/memory/model/types";
 

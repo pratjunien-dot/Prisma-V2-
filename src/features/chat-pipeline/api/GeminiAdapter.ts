@@ -1,5 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { Matrix, Persona } from "../model/chat-pipeline.store";
+import { Matrix } from "../model/chat-pipeline.store";
+import { Persona } from "../../../entities/persona/model/types";
 
 // Initialize Gemini API
 // Note: In a real app, this key should be securely provided, not hardcoded.
@@ -38,10 +39,10 @@ export class GeminiAdapter {
 
       try {
         const result = JSON.parse(response.text || "[]");
-        return result.map((item: any) => ({ ...item, mode: "SIMPLE" }));
+        return result.map((item: { id: string; name: string; description: string; mode: string }) => ({ ...item, mode: "SIMPLE" }));
       } catch (e) {
         console.error("Failed to parse Gemini response for SIMPLE matrices", e);
-        throw new Error("Invalid response format from Gemini");
+        throw new Error("Invalid response format from Gemini", { cause: e });
       }
     } else {
       // DETAILED mode: Generate 3 matrices, each with 6 unique labels
@@ -76,14 +77,14 @@ export class GeminiAdapter {
       try {
         const result = JSON.parse(response.text || "[]");
         // Ensure exactly 6 labels
-        return result.map((item: any) => ({
+        return result.map((item: { id: string; name: string; mode: string; labels: string[] }) => ({
           ...item,
           mode: "DETAILED",
           labels: item.labels.slice(0, 6)
         }));
       } catch (e) {
         console.error("Failed to parse Gemini response for DETAILED matrices", e);
-        throw new Error("Invalid response format from Gemini");
+        throw new Error("Invalid response format from Gemini", { cause: e });
       }
     }
   }
@@ -126,7 +127,7 @@ export class GeminiAdapter {
 
     try {
       const result = JSON.parse(response.text || "[]");
-      return result.map((item: any, index: number) => ({
+      return result.map((item: { name: string; avatar: string; description: string; variables: Record<string, string> }, index: number) => ({
         id: `p_${Date.now()}_${index}`,
         name: item.name,
         role: "Expert", // Default role
@@ -142,7 +143,7 @@ export class GeminiAdapter {
       }));
     } catch (e) {
       console.error("Failed to parse Gemini response for personas", e);
-      throw new Error("Invalid response format from Gemini");
+      throw new Error("Invalid response format from Gemini", { cause: e });
     }
   }
 }
