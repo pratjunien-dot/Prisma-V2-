@@ -1,0 +1,88 @@
+{
+  "entities": {
+    "Persona": {
+      "title": "Persona",
+      "description": "A generated AI persona",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "icon": { "type": "string" },
+        "attributes": { "type": "object", "description": "Record of string or array of strings" }
+      },
+      "required": ["id", "name", "icon", "attributes"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "A message in a chat",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "chatId": { "type": "string" },
+        "userId": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "model"] },
+        "content": { "type": "string" },
+        "responses": { "type": "array", "items": { "type": "object" } },
+        "createdAt": { "type": "string", "format": "timestamp" }
+      },
+      "required": ["id", "chatId", "userId", "role", "createdAt"]
+    },
+    "MemoryBank": {
+      "title": "MemoryBank",
+      "description": "Memory data for a persona",
+      "type": "object",
+      "properties": {
+        "topics": { "type": "array", "items": { "type": "string" } },
+        "preferences": { "type": "array", "items": { "type": "string" } },
+        "sessions_summary": { "type": "string" }
+      },
+      "required": ["topics", "preferences", "sessions_summary"]
+    },
+    "User": {
+      "title": "User",
+      "description": "A user profile",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "timestamp" }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "Chat": {
+      "title": "Chat",
+      "description": "A chat session",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "selectedPersona": { "$ref": "#/entities/Persona" },
+        "updatedAt": { "type": "string", "format": "timestamp" }
+      },
+      "required": ["userId", "title", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/users/{userId}/favoritePersonas/{personaId}": {
+      "schema": "Persona",
+      "description": "User's favorite personas"
+    },
+    "/users/{userId}/favoritePersonas/{personaId}/memory/data": {
+      "schema": "MemoryBank",
+      "description": "Memory data for a specific persona"
+    },
+    "/chats/{chatId}": {
+      "schema": "Chat",
+      "description": "Chat sessions"
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "Messages within a chat"
+    }
+  }
+}

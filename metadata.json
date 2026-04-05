@@ -1,0 +1,5 @@
+{
+  "name": "Remix: Prisma OS V2",
+  "description": "Une interface conversationnelle futuriste (Liquid Glass) propulsée par Gemini, intégrant des personas génératifs, un système de mémoire à long terme, des débats multi-agents et une radio intégrée.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,202 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - uid: string (required)
+    //   - email: string (required)
+    //   - displayName: string (optional)
+    //   - createdAt: timestamp (required)
+    //
+    // Collection: users/{userId}/favoritePersonas
+    // Document ID: {personaId}
+    // Fields:
+    //   - id: string (required)
+    //   - name: string (required)
+    //   - icon: string (required)
+    //   - attributes: map (required)
+    //
+    // Collection: users/{userId}/favoritePersonas/{personaId}/memory
+    // Document ID: data
+    // Fields:
+    //   - topics: list of strings (required)
+    //   - preferences: list of strings (required)
+    //   - sessions_summary: string (required)
+    //
+    // Collection: chats
+    // Document ID: {chatId}
+    // Fields:
+    //   - userId: string (required)
+    //   - title: string (required)
+    //   - selectedPersona: map (optional)
+    //   - updatedAt: timestamp (required)
+    //
+    // Collection: chats/{chatId}/messages
+    // Document ID: {messageId}
+    // Fields:
+    //   - id: string (required)
+    //   - chatId: string (required)
+    //   - userId: string (required)
+    //   - role: string (required, 'user' or 'model')
+    //   - content: string (optional)
+    //   - responses: list of maps (optional)
+    //   - createdAt: timestamp (required)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function uidUnchanged() {
+      return !('uid' in request.resource.data) || request.resource.data.uid == request.auth.uid;
+    }
+
+    function uidNotModified() {
+      return !('uid' in request.resource.data) || request.resource.data.uid == resource.data.uid;
+    }
+
+    function isValidString(field, minLen, maxLen) {
+      return request.resource.data[field] is string &&
+             request.resource.data[field].size() >= minLen &&
+             request.resource.data[field].size() <= maxLen;
+    }
+
+    function isValidOptionalString(field, minLen, maxLen) {
+      return !(field in request.resource.data) ||
+             (request.resource.data[field] is string &&
+              request.resource.data[field].size() >= minLen &&
+              request.resource.data[field].size() <= maxLen);
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidUser() {
+      return hasRequiredFields(['uid', 'email', 'createdAt']) &&
+             hasOnlyAllowedFields(['uid', 'email', 'displayName', 'createdAt']) &&
+             request.resource.data.uid == request.auth.uid &&
+             isValidEmail(request.resource.data.email) &&
+             isValidOptionalString('displayName', 0, 100) &&
+             request.resource.data.createdAt is timestamp;
+    }
+
+    function isValidPersona() {
+      return hasRequiredFields(['id', 'name', 'icon', 'attributes']) &&
+             hasOnlyAllowedFields(['id', 'name', 'icon', 'attributes']) &&
+             isValidString('id', 1, 100) &&
+             isValidString('name', 1, 100) &&
+             isValidString('icon', 1, 500) &&
+             request.resource.data.attributes is map;
+    }
+
+    function isValidMemoryBank() {
+      return hasRequiredFields(['topics', 'preferences', 'sessions_summary']) &&
+             hasOnlyAllowedFields(['topics', 'preferences', 'sessions_summary']) &&
+             request.resource.data.topics is list &&
+             request.resource.data.preferences is list &&
+             isValidString('sessions_summary', 0, 100000);
+    }
+
+    function isValidChat() {
+      return hasRequiredFields(['userId', 'title', 'updatedAt']) &&
+             hasOnlyAllowedFields(['userId', 'title', 'selectedPersona', 'updatedAt']) &&
+             request.resource.data.userId == request.auth.uid &&
+             isValidString('title', 1, 200) &&
+             (!('selectedPersona' in request.resource.data) || request.resource.data.selectedPersona is map) &&
+             request.resource.data.updatedAt is timestamp;
+    }
+
+    function isValidChatMessage() {
+      return hasRequiredFields(['id', 'chatId', 'userId', 'role', 'createdAt']) &&
+             hasOnlyAllowedFields(['id', 'chatId', 'userId', 'role', 'content', 'responses', 'createdAt']) &&
+             isValidString('id', 1, 100) &&
+             isValidString('chatId', 1, 100) &&
+             request.resource.data.userId == request.auth.uid &&
+             request.resource.data.role in ['user', 'model'] &&
+             isValidOptionalString('content', 0, 100000) &&
+             (!('responses' in request.resource.data) || request.resource.data.responses is list) &&
+             request.resource.data.createdAt is timestamp;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser() && uidUnchanged();
+      allow update: if isOwner(userId) && isValidUser() && uidNotModified() &&
+                    request.resource.data.createdAt == resource.data.createdAt;
+      
+      match /favoritePersonas/{personaId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidPersona();
+        allow update: if isOwner(userId) && isValidPersona() &&
+                      request.resource.data.id == resource.data.id;
+        allow delete: if isOwner(userId);
+
+        match /memory/{docId} {
+          allow read: if isOwner(userId) && docId == 'data';
+          allow create: if isOwner(userId) && docId == 'data' && isValidMemoryBank();
+          allow update: if isOwner(userId) && docId == 'data' && isValidMemoryBank();
+          allow delete: if isOwner(userId) && docId == 'data';
+        }
+      }
+    }
+
+    match /chats/{chatId} {
+      // Allow read if the user owns the chat
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      // Allow create if the user is authenticated and the chat userId matches their uid
+      allow create: if isAuthenticated() && isValidChat() && request.resource.data.userId == request.auth.uid;
+      // Allow update if the user owns the chat and the userId is not modified
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid && 
+                    isValidChat() && request.resource.data.userId == resource.data.userId;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+
+      match /messages/{messageId} {
+        // Allow read if the user owns the parent chat
+        allow read: if isAuthenticated() && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid;
+        // Allow create if the user owns the parent chat and the message userId matches their uid
+        allow create: if isAuthenticated() && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid &&
+                      isValidChatMessage() && request.resource.data.userId == request.auth.uid;
+        // Allow update if the user owns the parent chat and the message userId is not modified
+        allow update: if isAuthenticated() && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid &&
+                      isValidChatMessage() && request.resource.data.userId == resource.data.userId &&
+                      request.resource.data.createdAt == resource.data.createdAt;
+        allow delete: if isAuthenticated() && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid;
+      }
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
